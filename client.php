@@ -23,4 +23,4 @@ while(true) {
     }
 }
 
-socket_close($socket);
+//socket_close($socket);

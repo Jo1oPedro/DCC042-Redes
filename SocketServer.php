@@ -16,20 +16,19 @@ while(true) {
     socket_select($read, $write, $except, 0, 200000);
 
     foreach($read as $client) {
-        if ($client === $socket) {
+        if ($client === $socket) { // Handle incoming connections
             $new_socket = socket_accept($socket);
             $clients[] = $new_socket;
         } else { //Handle incoming message
             $data = socket_read($client, 1024);
-            if($data === false) {
+            if($data === false) { // Handle sockets closeds
                 $index = array_search($client, $clients);
                 unset($clients[$index]);
                 socket_close($client);
                 continue;
             }
             $message = trim($data);
-            if(!empty($message)) {
-                //Broadcast message to other clients
+            if(!empty($message)) { //Broadcast message to other clients
                 foreach($clients as $other_client) {
                     if($other_client !== $socket && $other_client !== $client) {
                         socket_write($other_client, $message);
