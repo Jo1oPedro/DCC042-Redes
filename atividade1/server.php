@@ -17,12 +17,14 @@ while(true) {
     foreach($read as $client) {
         if($client === $socket) {
             $new_socket = socket_accept($socket);
-            $clients[] = $new_socket;
+            if(!in_array($new_socket, $clients)) {
+                array_push($clients, $new_socket);
+            }
         } else {
-            $data = socket_read($new_socket, 1024);
+            $data = socket_read($client, 1024);
             $message = trim($data);
             if(!empty($message)) { //Broadcast message to other clients
-                socket_write($new_socket, $data);
+                socket_write($client, 'entrou');
             }
         }
     }
